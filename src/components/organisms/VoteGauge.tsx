@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Button, ButtonAppearance, GraySquareButton, ThinButton } from '../atoms/Button'
 import { StyledArrowDropDown, StyledClose } from '../atoms/Icon'
-import { Flex } from '../atoms/Layout'
+import { Flex, ShadowDiv } from '../atoms/Layout'
 import { Text } from '../atoms/Typography'
 import { SmallerInputSection } from '../molecules/InputSection'
 import { processProtocolName } from './Dropdown'
@@ -35,7 +35,7 @@ export const VoteGauge = ({
                 <img src={`https://assets.solace.fi/zapperLogos/${appId}`} height={16} />
               </Text>
               <Text t5s style={{ width: '100%' }}>
-                <Flex between>
+                <Flex between itemsCenter>
                   <Text t5s techygradient mont>
                     {appId != '' ? processProtocolName(appId) : 'Choose Protocol'}
                   </Text>
@@ -52,7 +52,13 @@ export const VoteGauge = ({
             onChange={(e) => onVoteInput(e.target.value, index)}
           />
         </div>
-        {votesData[index].added && <Button onClick={() => deleteVote(index)}>Close</Button>}
+        {votesData[index].added && (
+          <ShadowDiv>
+            <GraySquareButton width={36} actuallyWhite noborder onClick={() => deleteVote(index)}>
+              X
+            </GraySquareButton>
+          </ShadowDiv>
+        )}
       </Flex>
     </ButtonAppearance>
   )

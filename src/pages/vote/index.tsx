@@ -268,7 +268,7 @@ function Vote(): JSX.Element {
           <TileCard gap={15} bgSecondary>
             <Flex col gap={15}>
               <ShadowDiv>
-                <Flex gap={12} p={10} bgRaised>
+                <Flex gap={12} p={10} bgRaised rounded>
                   <Flex col itemsCenter width={126}>
                     <Text techygradient t6s>
                       My Total Points

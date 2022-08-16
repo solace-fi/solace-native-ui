@@ -120,7 +120,7 @@ export interface ShadowDivProps {
 export const ShadowDiv = styled.div<ShadowDivProps>`
   box-shadow: 0px 0px 30px -10px rgba(138, 138, 138, 0.15);
   border-radius: 12px;
-  overflow: hidden;
+  /* overflow: hidden; */
   ${(props) =>
     props.stretch &&
     css`
