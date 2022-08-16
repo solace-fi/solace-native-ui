@@ -77,7 +77,7 @@ export const Flex = styled.div<FlexProps & ButtonProps & GeneralElementProps>`
   ${({ hidden })        => hidden                      ? css`display: none;`                                              : ""}
   ${({ baseline })      => baseline                    ? css`display: inline-block;`                                      : ""}
   ${({ flex1 })         => flex1                       ? css`flex: 1;`                                                    : ""}
-  ${({ rounded })       => rounded       !== undefined ? css`border-radius: ${isNum(rounded) ? rounded : 10}px;`          : ""}
+  ${({ rounded })       => rounded       !== undefined ? css`border-radius: ${isNum(rounded) ? rounded : 12}px;`          : ""}
   ${({ shadow })        => shadow                      ? css`box-shadow: 0px 0px 30px -10px rgba(138, 138, 138, 0.15);`                : ""}
   ${({ thinScrollbar }) => thinScrollbar               ? ThinScrollbarCss                                                 : ""}
   ${({ zIndex })        => zIndex        !== undefined ? css`z-index: ${zIndex};`                                         : ""}
@@ -118,8 +118,9 @@ export interface ShadowDivProps {
   stretch?: boolean
 }
 export const ShadowDiv = styled.div<ShadowDivProps>`
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
+  box-shadow: 0px 0px 30px -10px rgba(138, 138, 138, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
   ${(props) =>
     props.stretch &&
     css`

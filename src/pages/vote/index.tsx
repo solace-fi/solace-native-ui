@@ -191,15 +191,21 @@ function Vote(): JSX.Element {
                       <Tooltip content={<CustomPieChartTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
-                  <Flex col gap={18} widthP={50}>
+                  <Flex col gap={18} widthP={50} justifyCenter>
                     {summarizedData.map((entry, index) => (
                       <Flex key={`${entry.name}-${index}`} between>
                         <Text
+                          t5s
                           bold
                           textAlignLeft
                           style={{ color: index < COLORS.length ? COLORS[index] : 'inherit' }}
                         >{`${entry.name}`}</Text>
-                        <Text bold textAlignRight>{`${entry.value}%`}</Text>
+                        <Text
+                          t5s
+                          bold
+                          textAlignRight
+                          style={{ color: index < COLORS.length ? COLORS[index] : 'inherit' }}
+                        >{`${entry.value}%`}</Text>
                       </Flex>
                     ))}
                   </Flex>
@@ -209,41 +215,60 @@ function Vote(): JSX.Element {
           </TileCard>
           <TileCard gap={10}>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
             <Flex between>
-              <Text>Underwriting Pool Size</Text>
-              <Text>$100</Text>
+              <Text bold t5s>
+                Underwriting Pool Size
+              </Text>
+              <Text bold t5s secondary>
+                $100
+              </Text>
             </Flex>
           </TileCard>
         </Flex>
         <Flex col widthP={!isMobile ? 40 : undefined} p={10}>
-          <TileCard gap={15}>
-            <Flex>
-              <Text semibold t2>
-                My Gauge Votes
-              </Text>
-            </Flex>
-            <Flex col itemsCenter gap={15}>
+          <TileCard gap={15} bgSecondary>
+            <Flex col gap={15}>
               <ShadowDiv>
-                <Flex gap={12} p={10}>
+                <Flex gap={12} p={10} bgRaised>
                   <Flex col itemsCenter width={126}>
                     <Text techygradient t6s>
                       My Total Points
@@ -259,6 +284,11 @@ function Vote(): JSX.Element {
                   </Flex>
                 </Flex>
               </ShadowDiv>
+              <Flex>
+                <Text semibold t2>
+                  My Gauge Votes
+                </Text>
+              </Flex>
               <Accordion isOpen={votesData.length > 0} thinScrollbar>
                 <Flex col gap={10} p={10}>
                   {votesData.map((voteData, i) => (
