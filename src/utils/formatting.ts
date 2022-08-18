@@ -1,7 +1,6 @@
 import { formatUnits } from '@ethersproject/units'
 import { BigNumber } from 'ethers'
-import { FunctionName, Unit } from '../constants/enums'
-import { NetworkConfig, TokenInfo } from '../constants/types'
+import { TokenInfo } from '../constants/types'
 import { rangeFrom0 } from './numeric'
 
 // truncate numbers without rounding
