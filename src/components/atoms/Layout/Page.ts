@@ -42,6 +42,7 @@ export interface FlexProps {
   bgSuccess?: boolean
   bgError?: boolean
   bgLightGray?: boolean
+  bgTertiary?: boolean
 }
 
 // type Conditional = string | number | boolean | undefined
@@ -90,6 +91,7 @@ export const Flex = styled.div<FlexProps & ButtonProps & GeneralElementProps>`
   ${(props)             => props.bgError               ? css`background-color: ${(props.theme as Theme).typography.errorText};` : ""}
   ${(props)             => props.bgSuccess             ? css`background-color: ${(props.theme as Theme).typography.successText};` : ""}
   ${(props)             => props.bgLightGray           ? css`background-color: ${(props.theme as Theme).typography.lightGray};` : ""}
+  ${(props)             => props.bgTertiary            ? css`background-color: ${(props.theme as Theme).v2.tertiary};` : ""}
   ${GeneralElementCss}
 `
 

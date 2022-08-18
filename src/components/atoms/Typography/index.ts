@@ -16,6 +16,7 @@ export interface TextStyleProps extends GeneralElementProps {
   dark?: boolean
   secondary?: boolean
   contrast?: boolean
+  opposite?: boolean
   outlined?: boolean
   autoAlignVertical?: boolean
   autoAlignHorizontal?: boolean
@@ -279,6 +280,7 @@ export const TextStyleCss = css<TextStyleProps>`
   ${(props) => props.dark && `color: ${props.theme.typography.darkText};`}
   ${(props) => props.secondary && `color: ${props.theme.typography.secondary};`}
   ${(props) => props.contrast && `color: ${props.theme.typography.contrastText};`}
+  ${(props) => props.opposite && `color: ${props.theme.typography.opposite};`}
   ${(props) => props.fade && `opacity: 0.8;`}
   ${(props) => props.inline && `display: inline;`}
   /* techy gradient is props.theme.typography.techyGradientA and techyGradientB (top to bottom); text bg clip css */

@@ -32,9 +32,19 @@ export const VoteContent = () => {
           <StatsBox />
         </Flex>
         <Flex col widthP={!isMobile ? 40 : undefined} p={10}>
-          <TileCard gap={15} bgSecondary>
-            <div style={{ gridTemplateColumns: '1fr 0fr 1fr', display: 'grid', position: 'relative' }}>
-              <ModalCell
+          <TileCard gap={15} bgSecondary noPadding>
+            {/* <div style={{ gridTemplateColumns: '1fr 0fr 1fr', display: 'grid', position: 'relative' }}> */}
+            <Flex
+              stretch
+              bgTertiary
+              pt={1}
+              style={{
+                // rounded at the top only with 12px
+                borderTopLeftRadius: '12px',
+                borderTopRightRadius: '12px',
+              }}
+            >
+              {/* <ModalCell
                 pt={5}
                 pb={10}
                 pl={0}
@@ -60,9 +70,47 @@ export const VoteContent = () => {
                 <Text t3 bold info={!ownerTab}>
                   Vote as a Delegate
                 </Text>
-              </ModalCell>
-            </div>
-            {ownerTab ? <OwnerVoteTab /> : <DelegatorVoteTab />}
+              </ModalCell> */}
+              <Flex
+                justifyCenter
+                py={8}
+                bgSecondary={ownerTab}
+                flex1
+                onClick={() => setOwnerTab(true)}
+                style={{
+                  userSelect: 'none',
+                  cursor: 'pointer',
+                  borderTopLeftRadius: ownerTab ? 12 : 0,
+                  borderTopRightRadius: ownerTab ? 12 : 0,
+                }}
+              >
+                <Text semibold opposite={!ownerTab}>
+                  Vote as myself
+                </Text>
+              </Flex>
+              {/* <VerticalSeparator /> */}
+              <Flex
+                justifyCenter
+                py={8}
+                flex1
+                bgSecondary={!ownerTab}
+                onClick={() => setOwnerTab(false)}
+                style={{
+                  userSelect: 'none',
+                  cursor: 'pointer',
+                  // rounded only top right corner
+                  borderTopRightRadius: !ownerTab ? 12 : 0,
+                  borderTopLeftRadius: !ownerTab ? 12 : 0,
+                }}
+              >
+                <Text semibold opposite={ownerTab}>
+                  Vote as a delegate
+                </Text>
+              </Flex>
+            </Flex>
+            <Flex col px={24} pb={24} gap={15}>
+              {ownerTab ? <OwnerVoteTab /> : <DelegatorVoteTab />}
+            </Flex>
           </TileCard>
         </Flex>
       </Flex>

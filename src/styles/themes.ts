@@ -16,6 +16,7 @@ export const lightTheme = {
     lightGray: 'rgb(244, 245, 247)',
     separator: '#E3E4E6',
     lightNeutral: '#F2CAD6',
+    opposite: 'rgb(250, 250, 250)',
   },
   body: {
     bg_color: '#fafafa',
@@ -122,6 +123,7 @@ export const darkTheme = {
     lightGray: 'rgba(255, 255, 255, 0.02)',
     separator: '#828282',
     lightNeutral: '#F2CAD6',
+    opposite: 'rgba(0,0,0,0.75)',
   },
   body: {
     bg_color: '#242933',
