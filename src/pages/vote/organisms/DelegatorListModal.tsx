@@ -4,29 +4,58 @@ import { Accordion } from '../../../components/atoms/Accordion'
 import { ButtonAppearance } from '../../../components/atoms/Button'
 import { Flex } from '../../../components/atoms/Layout'
 import { Text } from '../../../components/atoms/Typography'
+import { CopyButton } from '../../../components/molecules/CopyButton'
 import { SmallerInputSection } from '../../../components/molecules/InputSection'
 import { Modal } from '../../../components/molecules/Modal'
 import { useGeneral } from '../../../context/GeneralManager'
+import useCopyClipboard from '../../../hooks/internal/useCopyToClipboard'
 import { floatUnits, shortenAddress, truncateValue } from '../../../utils/formatting'
 import { useVoteContext } from '../VoteContext'
 
-const TextDropdownOptions = ({
-  searchedList,
-  isOpen,
-  noneText,
-  onClick,
-}: {
-  searchedList: { mainText: string; secondaryText: string; icon?: JSX.Element }[]
-  isOpen: boolean
-  noneText?: string
-  onClick?: (value: string) => void
-}): JSX.Element => {
+const TextOption = ({ mainText }: { mainText: string }) => {
   const { appTheme } = useGeneral()
+
   const gradientStyle = useMemo(
     () =>
       appTheme == 'light' ? { techygradient: true, warmgradient: false } : { techygradient: false, warmgradient: true },
     [appTheme]
   )
+  const [isCopied, setCopied] = useCopyClipboard()
+
+  return (
+    <ButtonAppearance
+      key={mainText}
+      matchBg
+      secondary
+      noborder
+      height={37}
+      pt={10.5}
+      pb={10.5}
+      pl={12}
+      pr={12}
+      style={{ borderRadius: '8px' }}
+      onClick={() => setCopied(mainText)}
+    >
+      <Flex stretch gap={12} justifyCenter>
+        <Flex gap={8} itemsCenter>
+          <Text {...gradientStyle} textAlignCenter>
+            {isCopied ? 'Copied!' : shortenAddress(mainText)}
+          </Text>
+        </Flex>
+      </Flex>
+    </ButtonAppearance>
+  )
+}
+
+const TextDropdownOptions = ({
+  searchedList,
+  isOpen,
+  noneText,
+}: {
+  searchedList: { mainText: string }[]
+  isOpen: boolean
+  noneText?: string
+}): JSX.Element => {
   return (
     <Accordion
       isOpen={isOpen}
@@ -38,28 +67,7 @@ const TextDropdownOptions = ({
     >
       <Flex col gap={8} p={12}>
         {searchedList.map((item) => (
-          <ButtonAppearance
-            key={item.mainText}
-            matchBg
-            secondary
-            noborder
-            height={37}
-            pt={10.5}
-            pb={10.5}
-            pl={12}
-            pr={12}
-            onClick={() => (onClick ? item.mainText : null)}
-            style={{ borderRadius: '8px' }}
-          >
-            <Flex stretch gap={12}>
-              <Flex gap={8} itemsCenter>
-                {item.icon ?? <Text {...gradientStyle}>{shortenAddress(item.mainText)}</Text>}
-              </Flex>
-              <Text autoAlignVertical t5s bold>
-                {item.secondaryText}
-              </Text>
-            </Flex>
-          </ButtonAppearance>
+          <TextOption key={item.mainText} mainText={item.mainText} />
         ))}
         {searchedList.length === 0 && (
           <Text t3 textAlignCenter bold>
@@ -71,15 +79,7 @@ const TextDropdownOptions = ({
   )
 }
 
-export const DelegatorSelectionModal = ({
-  show,
-  handleClose,
-  onClick,
-}: {
-  show: boolean
-  handleClose: () => void
-  onClick: (value: string) => void
-}): JSX.Element => {
+export const DelegatorListModal = ({ show, handleClose }: { show: boolean; handleClose: () => void }): JSX.Element => {
   const { voteDelegators } = useVoteContext()
   const { delegatorVotesData } = voteDelegators
 
@@ -102,17 +102,17 @@ export const DelegatorSelectionModal = ({
       .map((item) => {
         return {
           mainText: item.delegator,
-          secondaryText: `${truncateValue(
-            floatUnits(item.votePower, 18) -
-              (parseFloat(item.usedVotePowerBPS.toString()) / 10000) * floatUnits(item.votePower, 18),
-            2
-          )} free / ${truncateValue(formatUnits(item.votePower, 18), 2)}`,
+          // secondaryText: `${truncateValue(
+          //   floatUnits(item.votePower, 18) -
+          //     (parseFloat(item.usedVotePowerBPS.toString()) / 10000) * floatUnits(item.votePower, 18),
+          //   2
+          // )} free / ${truncateValue(formatUnits(item.votePower, 18), 2)}`,
         }
       })
   }, [searchTerm, delegatorVotesData])
 
   return (
-    <Modal isOpen={show} handleClose={handleClose} modalTitle={'Select a delegator'}>
+    <Modal isOpen={show} handleClose={handleClose} modalTitle={'My delegators'}>
       <SmallerInputSection
         placeholder={'Search'}
         value={searchTerm}

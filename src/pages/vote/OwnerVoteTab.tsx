@@ -112,7 +112,7 @@ export const OwnerVoteTab = () => {
     <>
       <Flex between>
         <Text semibold t2>
-          My Gauge Votes
+          My Votes
         </Text>
         <Flex gap={10}>
           <Button secondary info noborder onClick={() => handleDelegateModalOpen(true)}>
@@ -166,9 +166,13 @@ export const OwnerVoteTab = () => {
         {editingVotesData.localVoteAllocation.length > 0 && (
           <Accordion isOpen={true} thinScrollbar widthP={!isEditing ? 100 : undefined}>
             <Flex col gap={10} p={10}>
-              {editingVotesData.localVoteAllocation.map((voteData, i) => (
-                <OwnerVoteGauge key={i} index={i} isEditing={isEditing} voteAllocData={voteData} />
-              ))}
+              {editingVotesData.localVoteAllocation
+                .sort((a, b) => {
+                  return parseFloat(b.votePowerPercentage) - parseFloat(a.votePowerPercentage)
+                })
+                .map((voteData, i) => (
+                  <OwnerVoteGauge key={i} index={i} isEditing={isEditing} voteAllocData={voteData} />
+                ))}
             </Flex>
           </Accordion>
         )}

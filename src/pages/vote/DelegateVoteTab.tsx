@@ -17,6 +17,7 @@ import { CopyButton } from '../../components/molecules/CopyButton'
 import { StyledArrowIosBackOutline } from '../../components/atoms/Icon'
 import { useCachedData } from '../../context/CachedDataManager'
 import useDebounce from '@rooks/use-debounce'
+import { DelegatorListModal } from './organisms/DelegatorListModal'
 
 const TextDropdownOptions = ({
   searchedList,
@@ -93,7 +94,7 @@ export const DelegatorVoteTab = () => {
   const { voteForMultipleVoters, removeVotesForMultipleVoters } = useUwLockVoting()
   const { handleToast, handleContractCallError } = useTransactionExecution()
 
-  // const [showDelegatorSelection, setShowDelegatorSelection] = useState(true)
+  const [showDelegatorModal, setShowDelegatorModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [commonPercentage, setCommonPercentage] = useState<string>('')
 
@@ -202,25 +203,26 @@ export const DelegatorVoteTab = () => {
   const callVote = useCallback(async () => {
     if (!isVotingOpen) return
     const voters = delegatorVotesData.map((g) => g.delegator)
-    const gaugeIds = delegateVotesData.localVoteAllocation.map((g) => g.gaugeId)
-    const votePowerBPSs = delegateVotesData.localVoteAllocation.map((g) =>
+    const gaugeIds = editingDelegateVotesData.localVoteAllocation.map((g) => g.gaugeId)
+    const votePowerBPSs = editingDelegateVotesData.localVoteAllocation.map((g) =>
       BigNumber.from(Math.floor(parseFloat(formatAmount(g.votePowerPercentage)) * 100))
     )
+    console.log(voters, gaugeIds, votePowerBPSs)
     await voteForMultipleVoters(voters, gaugeIds, votePowerBPSs)
       .then((res) => handleToast(res.tx, res.localTx))
       .catch((err) => handleContractCallError('callVoteForMultipleVoters', err, FunctionName.VOTE_FOR_MULTIPLE_VOTERS))
-  }, [delegateVotesData.localVoteAllocation, isVotingOpen, delegatorVotesData, voteForMultipleVoters])
+  }, [editingDelegateVotesData.localVoteAllocation, isVotingOpen, delegatorVotesData, voteForMultipleVoters])
 
   const callRemoveVote = useCallback(async () => {
     if (!isVotingOpen) return
     const voters = delegatorVotesData.map((g) => g.delegator)
-    const gaugeIds = delegateVotesData.localVoteAllocation.map((g) => g.gaugeId)
+    const gaugeIds = editingDelegateVotesData.localVoteAllocation.map((g) => g.gaugeId)
     await removeVotesForMultipleVoters(voters, gaugeIds)
       .then((res) => handleToast(res.tx, res.localTx))
       .catch((err) =>
         handleContractCallError('callRemoveVotesForMultipleVoters', err, FunctionName.REMOVE_VOTES_FOR_MULTIPLE_VOTERS)
       )
-  }, [delegateVotesData.localVoteAllocation, isVotingOpen, delegatorVotesData, removeVotesForMultipleVoters])
+  }, [editingDelegateVotesData.localVoteAllocation, isVotingOpen, delegatorVotesData, removeVotesForMultipleVoters])
 
   const setCommonPercentageValue = useDebounce(() => {
     for (let i = 0; i < editingDelegateVotesData.localVoteAllocation.length; i++) {
@@ -309,6 +311,17 @@ export const DelegatorVoteTab = () => {
             </Text>
             <CopyButton toCopy={selectedDelegator} objectName={''} />
           </Flex> */}
+        <DelegatorListModal show={showDelegatorModal} handleClose={() => setShowDelegatorModal(false)} />
+        <Flex between>
+          <Text semibold t2>
+            {`Delegators: ${delegatorVotesData.length}`}
+          </Text>
+          <Flex gap={10}>
+            <Button secondary info noborder onClick={() => setShowDelegatorModal(true)}>
+              See More
+            </Button>
+          </Flex>
+        </Flex>
         <Flex col itemsCenter gap={15}>
           <ShadowDiv>
             <Flex gap={12} p={10}>
@@ -355,9 +368,13 @@ export const DelegatorVoteTab = () => {
           {editingDelegateVotesData.localVoteAllocation.length > 0 && (
             <Accordion isOpen={true} thinScrollbar widthP={!isEditing ? 100 : undefined}>
               <Flex col gap={10} p={10}>
-                {editingDelegateVotesData.localVoteAllocation.map((voteAllocData, i) => (
-                  <DelegateVoteGauge key={i} voteAllocData={voteAllocData} index={i} isEditing={isEditing} />
-                ))}
+                {editingDelegateVotesData.localVoteAllocation
+                  .sort((a, b) => {
+                    return parseFloat(b.votePowerPercentage) - parseFloat(a.votePowerPercentage)
+                  })
+                  .map((voteAllocData, i) => (
+                    <DelegateVoteGauge key={i} voteAllocData={voteAllocData} index={i} isEditing={isEditing} />
+                  ))}
               </Flex>
             </Accordion>
           )}
