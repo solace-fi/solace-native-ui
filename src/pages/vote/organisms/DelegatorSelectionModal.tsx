@@ -19,7 +19,7 @@ const TextDropdownOptions = ({
   searchedList: { mainText: string; secondaryText: string; icon?: JSX.Element }[]
   isOpen: boolean
   noneText?: string
-  onClick: (value: string) => void
+  onClick?: (value: string) => void
 }): JSX.Element => {
   const { appTheme } = useGeneral()
   const gradientStyle = useMemo(
@@ -48,7 +48,7 @@ const TextDropdownOptions = ({
             pb={10.5}
             pl={12}
             pr={12}
-            onClick={() => onClick(item.mainText)}
+            onClick={() => (onClick ? item.mainText : null)}
             style={{ borderRadius: '8px' }}
           >
             <Flex stretch gap={12}>
@@ -89,15 +89,26 @@ export const DelegatorSelectionModal = ({
     const filtered = searchTerm
       ? delegatorVotesData.filter((item) => item.delegator.toLowerCase().includes(searchTerm.toLowerCase()))
       : delegatorVotesData
-    return filtered.map((item) => {
-      return {
-        mainText: item.delegator,
-        secondaryText: `${truncateValue(
-          (parseFloat(item.usedVotePowerBPS.toString()) / 10000) * floatUnits(item.votePower, 18),
-          2
-        )} used / ${truncateValue(formatUnits(item.votePower, 18), 2)} total`,
-      }
-    })
+    return filtered
+      .sort((a, b) => {
+        const calcA =
+          floatUnits(a.votePower, 18) -
+          (parseFloat(a.usedVotePowerBPS.toString()) / 10000) * floatUnits(a.votePower, 18)
+        const calcB =
+          floatUnits(b.votePower, 18) -
+          (parseFloat(b.usedVotePowerBPS.toString()) / 10000) * floatUnits(b.votePower, 18)
+        return calcB - calcA
+      })
+      .map((item) => {
+        return {
+          mainText: item.delegator,
+          secondaryText: `${truncateValue(
+            floatUnits(item.votePower, 18) -
+              (parseFloat(item.usedVotePowerBPS.toString()) / 10000) * floatUnits(item.votePower, 18),
+            2
+          )} free / ${truncateValue(formatUnits(item.votePower, 18), 2)}`,
+        }
+      })
   }, [searchTerm, delegatorVotesData])
 
   return (
@@ -114,10 +125,10 @@ export const DelegatorSelectionModal = ({
       <TextDropdownOptions
         isOpen={true}
         searchedList={activeList}
-        onClick={(value: string) => {
-          onClick(value)
-          handleClose()
-        }}
+        // onClick={(value: string) => {
+        //   onClick(value)
+        //   handleClose()
+        // }}
       />
     </Modal>
   )

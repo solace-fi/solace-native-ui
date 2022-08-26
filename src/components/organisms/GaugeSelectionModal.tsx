@@ -16,7 +16,7 @@ export const GaugeSelectionModal = ({
   show: boolean
   target: {
     index?: number
-    delegator?: string
+    isOwner?: boolean
   }
   votesAllocationData: VoteAllocation[]
   gaugesData: GaugeData[]
@@ -62,7 +62,7 @@ export const GaugeSelectionModal = ({
         onClick={(value: string) => {
           const foundIndexOfName = gaugeNames.findIndex((name) => name === value)
           if (foundIndexOfName == -1) return
-          assign(value, gaugeIds[foundIndexOfName], target.index ?? 0, !target.delegator)
+          assign(value, gaugeIds[foundIndexOfName], target.index ?? 0, !target.isOwner)
           handleCloseModal()
         }}
       />

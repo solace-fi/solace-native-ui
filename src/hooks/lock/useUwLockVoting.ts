@@ -1,5 +1,4 @@
 import { ZERO, ZERO_ADDRESS } from '@solace-fi/sdk-nightly'
-import axios, { AxiosResponse } from 'axios'
 import { BigNumber } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { FunctionName, TransactionCondition } from '../../constants/enums'
@@ -184,6 +183,40 @@ export const useUwLockVoting = () => {
     [gasConfig, uwLockVoting]
   )
 
+  const voteForMultipleVoters = useCallback(
+    async (voters: string[], gaugeIds: BigNumber[], votePowerBPSs: BigNumber[]) => {
+      if (!uwLockVoting) return { tx: null, localTx: null }
+      const tx = await uwLockVoting.voteForMultipleVoters(voters, gaugeIds, votePowerBPSs, {
+        ...gasConfig,
+        gasLimit: 800000,
+      })
+      const localTx: LocalTx = {
+        hash: tx.hash,
+        type: FunctionName.VOTE_FOR_MULTIPLE_VOTERS,
+        status: TransactionCondition.PENDING,
+      }
+      return { tx, localTx }
+    },
+    [gasConfig, uwLockVoting]
+  )
+
+  const removeVotesForMultipleVoters = useCallback(
+    async (voters: string[], gaugeIds: BigNumber[]) => {
+      if (!uwLockVoting) return { tx: null, localTx: null }
+      const tx = await uwLockVoting.removeVotesForMultipleVoters(voters, gaugeIds, {
+        ...gasConfig,
+        gasLimit: 800000,
+      })
+      const localTx: LocalTx = {
+        hash: tx.hash,
+        type: FunctionName.REMOVE_VOTES_FOR_MULTIPLE_VOTERS,
+        status: TransactionCondition.PENDING,
+      }
+      return { tx, localTx }
+    },
+    [gasConfig, uwLockVoting]
+  )
+
   const setDelegate = useCallback(
     async (delegate: string) => {
       if (!uwLockVoting) return { tx: null, localTx: null }
@@ -215,6 +248,8 @@ export const useUwLockVoting = () => {
     delegateOf,
     usedVotePowerBPSOf,
     getVotingDelegatorsOf,
+    voteForMultipleVoters,
+    removeVotesForMultipleVoters,
   }
 }
 
