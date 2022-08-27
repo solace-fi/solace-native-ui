@@ -61,8 +61,8 @@ export const GaugeSelectionModal = ({
         noneText={'No matches found'}
         onClick={(value: string) => {
           const foundIndexOfName = gaugeNames.findIndex((name) => name === value)
-          if (foundIndexOfName == -1) return
-          assign(value, gaugeIds[foundIndexOfName], target.index ?? 0, !target.isOwner)
+          if (foundIndexOfName == -1 || target.isOwner == undefined) return
+          assign(value, gaugeIds[foundIndexOfName], target.index ?? 0, target.isOwner)
           handleCloseModal()
         }}
       />

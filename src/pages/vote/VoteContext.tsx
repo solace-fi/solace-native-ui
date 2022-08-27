@@ -324,7 +324,6 @@ const VoteManager: React.FC = (props) => {
 
       // fetch this current user's vote information and organize state
       const userVoteInfo = await getVoteInformation(account)
-      console.log(userVoteInfo)
       const _delegators = await getDelegators(account)
 
       const delegatorsVotesData = await Promise.all(_delegators.map(async (delegator) => getVoteInformation(delegator)))

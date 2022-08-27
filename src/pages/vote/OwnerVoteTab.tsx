@@ -90,6 +90,10 @@ export const OwnerVoteTab = () => {
     }
   }, [account, isVotingOpen, editingVotesData.localVoteAllocation])
 
+  const handleCommonPercentage = useCallback((percentage: string) => {
+    setCommonPercentage(percentage)
+  }, [])
+
   const setCommonPercentageValue = useDebounce(() => {
     for (let i = 0; i < editingVotesData.localVoteAllocation.length; i++) {
       onVoteInput(commonPercentage, i, true)
@@ -155,7 +159,7 @@ export const OwnerVoteTab = () => {
             <SmallerInputSection
               placeholder={'%'}
               value={commonPercentage}
-              onChange={(e) => setCommonPercentage(e.target.value)}
+              onChange={(e) => handleCommonPercentage(e.target.value)}
               style={{
                 width: '100%',
                 border: 'none',
@@ -166,13 +170,9 @@ export const OwnerVoteTab = () => {
         {editingVotesData.localVoteAllocation.length > 0 && (
           <Accordion isOpen={true} thinScrollbar widthP={!isEditing ? 100 : undefined}>
             <Flex col gap={10} p={10}>
-              {editingVotesData.localVoteAllocation
-                .sort((a, b) => {
-                  return parseFloat(b.votePowerPercentage) - parseFloat(a.votePowerPercentage)
-                })
-                .map((voteData, i) => (
-                  <OwnerVoteGauge key={i} index={i} isEditing={isEditing} voteAllocData={voteData} />
-                ))}
+              {editingVotesData.localVoteAllocation.map((voteData, i) => (
+                <OwnerVoteGauge key={i} index={i} isEditing={isEditing} voteAllocData={voteData} />
+              ))}
             </Flex>
           </Accordion>
         )}

@@ -66,7 +66,7 @@ export const OwnerVoteGauge = ({
         <Flex col gap={10}>
           <Flex gap={10}>
             <div style={{ width: '180px' }}>
-              <ThinButton onClick={() => handleGaugeSelectionModal(index)}>
+              <ThinButton onClick={() => handleGaugeSelectionModal(index, true)}>
                 <Flex style={{ width: '100%' }} itemsCenter>
                   <Text autoAlignVertical p={5}>
                     {appId != '' && <img src={`https://assets.solace.fi/zapperLogos/${appId}`} height={16} />}
