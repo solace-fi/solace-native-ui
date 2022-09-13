@@ -82,24 +82,70 @@ export const TokenPriceVolatilityCumm = (): JSX.Element => {
     })
   }
 
+  const fetchVega2 = (dataIn: any, density: any[], theme: 'light' | 'dark') => {
+    vegaEmbed('#vis3', {
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+      // title: { text: `${symbol.toUpperCase()}` + ' Cummulative Density', color: theme == 'light' ? 'black' : 'white' },
+      config: {
+        style: { cell: { stroke: 'transparent' } },
+        axis: { labelColor: theme == 'light' ? 'black' : 'white' },
+      },
+      background: 'transparent',
+      width: 'container',
+      height: 300,
+      autosize: {
+        type: 'fit',
+        contains: 'padding',
+        resize: true,
+      },
+      data: {
+        name: 'table',
+        values: dataIn.map((item: any) => {
+          return {
+            weight: item.weight,
+            symbol: item.symbol,
+          }
+        }),
+      },
+      layer: [
+        {
+          mark: { type: 'arc', innerRadius: 20, stroke: '#fff' },
+        },
+        {
+          mark: { type: 'text', radiusOffset: 10 },
+          encoding: {
+            text: { field: 'symbol' },
+          },
+        },
+      ],
+      encoding: {
+        theta: { field: 'weight', type: 'quantitative', stack: true },
+        radius: { field: 'weight', scale: { type: 'sqrt', zero: true, rangeMin: 20 } },
+        color: { field: 'weight', type: 'nominal', legend: null },
+      },
+    })
+  }
+
   useEffect(() => {
     if (!tickerSymbol) return
     const chartDataIndex = allDataPortfolio.findIndex((x) => x.symbol === tickerSymbol)
     const result = fetchedSipMathLib?.sips.filter((obj: { name: any }) => {
       return obj.name === allDataPortfolio[chartDataIndex].symbol
     })
-    const sipsAcoeffs = result?.[0].arguments.aCoefficients
+    // const sipsAcoeffs = result?.[0].arguments.aCoefficients
     const density = Array.from(Array(99).keys(), (n) => n / 100 + 0.01)
     console.log(density)
 
-    fetchVega(
+    /*   fetchVega(
       sipsAcoeffs,
       density,
       appTheme,
       allDataPortfolio[chartDataIndex].weight,
       allDataPortfolio[chartDataIndex].symbol
-    )
+    ) */
     setDisplayVega(true)
+    console.log('displayVega', allDataPortfolio)
+    fetchVega2(allDataPortfolio, density, appTheme)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickerSymbol])
 

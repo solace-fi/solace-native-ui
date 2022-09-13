@@ -14,6 +14,8 @@ type AnalyticsContextType = {
     canSeeTokenVolatilities?: boolean
   }
   data: {
+    activeTickerSymbol: string
+    setActiveTickerSymbol: (tickerSymbol: string) => void
     portfolioHistogramTickers: string[]
     tokenHistogramTickers: string[]
     trials: number
@@ -44,6 +46,8 @@ const AnalyticsContext = createContext<AnalyticsContextType>({
     fetchedUwpData: undefined,
     fetchedPremiums: undefined,
     tokenDetails: [],
+    activeTickerSymbol: '',
+    setActiveTickerSymbol: () => undefined,
   },
 })
 
@@ -55,6 +59,7 @@ const AnalyticsManager: React.FC = ({ children }) => {
   const [priceHistory30D, setPriceHistory30D] = useState<any[]>([])
   const [allDataPortfolio, setAllDataPortfolio] = useState<any[]>([])
   const [tokenDetails, setTokenDetails] = useState<{ symbol: string; price: number; weight: number }[]>([])
+  const [activeTickerSymbol, setActiveTickerSymbol] = useState<string>('')
 
   const [fetchedUwpData, setFetchedUwpData] = useState<FetchedUWPData | undefined>(undefined)
   const [fetchedSipMathLib, setFetchedSipMathLib] = useState<FetchedSipMathLib | undefined>(undefined)
@@ -273,6 +278,8 @@ const AnalyticsManager: React.FC = ({ children }) => {
         fetchedPremiums,
         fetchedSipMathLib,
         tokenDetails,
+        activeTickerSymbol,
+        setActiveTickerSymbol,
       },
     }),
     [
@@ -288,6 +295,7 @@ const AnalyticsManager: React.FC = ({ children }) => {
       fetchedSipMathLib,
       fetchedPremiums,
       tokenDetails,
+      activeTickerSymbol,
     ]
   )
   return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>

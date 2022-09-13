@@ -5,7 +5,13 @@ import AnalyticsManager, { useAnalyticsContext } from './AnalyticsContext'
 import { TokenPortfolioAreaChart } from './TokenPortfolioAreaChart'
 import { TokenPortfolioHistogram } from './TokenPortfolioHistogram'
 import { TokenPriceVolatilityHistogram } from './TokenPriceVolatilityHistogram'
+<<<<<<< HEAD
 // import { TokenPriceVolatilityCumm } from './TokenPriceVolatilityCumm'
+=======
+import { TokenScatterPlotMatrix } from './TokenScatterPlotMatrix'
+
+import { TokenPriceVolatilityCumm } from './TokenPriceVolatilityCumm'
+>>>>>>> 5264e6837614cb54c8c079bf03589b9b4b1df453
 import { Accordion } from '../../components/atoms/Accordion'
 import { StyledHelpCircle } from '../../components/atoms/Icon'
 import { TokenTable } from './TokenTable'
@@ -150,6 +156,7 @@ export function AnalyticsContent(): JSX.Element {
             </Text>
           </Flex>
         </Accordion>
+        <TokenScatterPlotMatrix />
         <TokenPriceVolatilityHistogram />
       </Flex>
       {/* <Flex col gap={10}>

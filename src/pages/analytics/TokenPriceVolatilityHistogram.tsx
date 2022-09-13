@@ -16,8 +16,7 @@ export const TokenPriceVolatilityHistogram = (): JSX.Element => {
   const { isMobile } = useWindowDimensions()
   const { intrface, data } = useAnalyticsContext()
   const { canSeeTokenVolatilities } = intrface
-  const { tokenHistogramTickers, fetchedSipMathLib, allDataPortfolio } = data
-  const [tickerSymbol, setTickerSymbol] = useState('')
+  const { tokenHistogramTickers, fetchedSipMathLib, allDataPortfolio, setActiveTickerSymbol, activeTickerSymbol } = data
   const [displayVega, setDisplayVega] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -144,21 +143,21 @@ export const TokenPriceVolatilityHistogram = (): JSX.Element => {
   }
 
   useEffect(() => {
-    if (!tickerSymbol) {
+    if (!activeTickerSymbol) {
       // we must set tickerSymbol to the symbol with the highest weight in the portfolio
       const highestWeightTicker = allDataPortfolio.length
         ? allDataPortfolio.reduce((prev, current) => (prev.weight > current.weight ? prev : current))
         : undefined
-      if (highestWeightTicker) setTickerSymbol(highestWeightTicker.symbol)
+      if (highestWeightTicker) setActiveTickerSymbol(highestWeightTicker.symbol)
     }
-    if (tickerSymbol.length === 0 || !canSeeTokenVolatilities) return
-    const chartDataIndex = allDataPortfolio.findIndex((x) => x.symbol === tickerSymbol)
-    const varBar = getVarBar(var4Bar, tickerSymbol)
+    if (activeTickerSymbol.length === 0 || !canSeeTokenVolatilities) return
+    const chartDataIndex = allDataPortfolio.findIndex((x) => x.symbol === activeTickerSymbol)
+    const varBar = getVarBar(var4Bar, activeTickerSymbol)
     setVarBar(varBar)
     fetchVega(allDataPortfolio[chartDataIndex], appTheme, varBar)
     if (!displayVega) setDisplayVega(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tickerSymbol, var4Bar, appTheme, allDataPortfolio, canSeeTokenVolatilities])
+  }, [activeTickerSymbol, var4Bar, appTheme, allDataPortfolio, canSeeTokenVolatilities])
 
   return (
     <Flex gap={10} col={isMobile || !canSeeTokenVolatilities}>
@@ -177,8 +176,8 @@ export const TokenPriceVolatilityHistogram = (): JSX.Element => {
             <DropdownOptionsUnique
               isOpen={true}
               searchedList={activeList.sort((a, b) => a.label.localeCompare(b.label))}
-              comparingList={[tickerSymbol]}
-              onClick={(value: string) => setTickerSymbol(value)}
+              comparingList={[activeTickerSymbol]}
+              onClick={(value: string) => setActiveTickerSymbol(value)}
               processName={true}
               customProcessFunction={(value: string) => value.toUpperCase()}
             />
@@ -192,9 +191,9 @@ export const TokenPriceVolatilityHistogram = (): JSX.Element => {
                 <Text textAlignCenter t2>
                   Today there is a {(100 - Number(valueOfRiskPercentage)).toFixed(2)}% chance of{' '}
                   <Text inline semibold info>
-                    {tickerSymbol.toUpperCase()}
+                    {activeTickerSymbol.toUpperCase()}
                   </Text>{' '}
-                  going down by {Math.abs(Number(lossPercentage))}%% or more.
+                  going down by {Math.abs(Number(lossPercentage))}% or more.
                 </Text>
                 <Flex col>
                   <Text textAlignCenter>Use the slider below to adjust the value of risk</Text>
