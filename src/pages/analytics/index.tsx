@@ -5,6 +5,8 @@ import AnalyticsManager, { useAnalyticsContext } from './AnalyticsContext'
 import { TokenPortfolioAreaChart } from './TokenPortfolioAreaChart'
 import { TokenPortfolioHistogram } from './TokenPortfolioHistogram'
 import { TokenPriceVolatilityHistogram } from './TokenPriceVolatilityHistogram'
+import { TokenScatterPlotMatrix } from './TokenScatterPlotMatrix'
+
 import { TokenPriceVolatilityCumm } from './TokenPriceVolatilityCumm'
 import { Accordion } from '../../components/atoms/Accordion'
 import { StyledHelpCircle } from '../../components/atoms/Icon'
@@ -103,6 +105,7 @@ export function AnalyticsContent(): JSX.Element {
             price changes.
           </Text>
         </Accordion>
+        <TokenScatterPlotMatrix />
         <TokenPriceVolatilityHistogram />
       </Flex>
       {/* <Flex col gap={10}>
